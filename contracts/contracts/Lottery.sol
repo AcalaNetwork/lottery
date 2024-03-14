@@ -21,6 +21,11 @@ contract Lottery is Ownable {
         acaToken = IERC20(_acaTokenAddress);
     }
 
+    function startLottery() external onlyOwner {
+        endTime = block.timestamp + duration;
+        ticketsSold = 0;
+    }
+
     function isOpen() public view returns (bool) {
         bool isTimePast = block.timestamp >= endTime;
         bool isTicketAvailable = ticketsSold < maxTicketsCount;
@@ -71,11 +76,6 @@ contract Lottery is Ownable {
     function randNumber(uint256 min, uint256 max) private view returns (uint256) {
         uint256 rand256 = uint256(keccak256(abi.encodePacked(blockhash(block.number - 1), block.timestamp)));
         return min + (rand256 % (max - min + 1));
-    }
-
-    function startLottery() external onlyOwner {
-        endTime = block.timestamp + duration;
-        ticketsSold = 0;
     }
 
     function setduration(uint256 _duration) external onlyOwner {
