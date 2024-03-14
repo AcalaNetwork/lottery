@@ -15,8 +15,8 @@ contract Lottery is Ownable {
     uint256 public maxTicketsCount = 350;
     uint256 public ticketsSold = 0;
 
-    constructor(address _apTokenAddress, address _acaTokenAddress, address initialOwner) 
-        Ownable(initialOwner) {
+    constructor(address _apTokenAddress, address _acaTokenAddress, address _initialOwner)
+        Ownable(_initialOwner) {
         apToken = ERC20Burnable(_apTokenAddress);
         acaToken = IERC20(_acaTokenAddress);
     }
