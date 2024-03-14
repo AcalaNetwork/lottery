@@ -61,6 +61,10 @@ describe("Lottery", function () {
     await (await ap.mintBatch([addr0, addr1], [mintAmount, mintAmount])).wait();
   });
 
+  const startLottery = async () => {
+    await (await lottery.connect(owner).startLottery()).wait();
+  }
+
   const testDraw = async (ticketCount: bigint, user: Signer) => {
     lottery = lottery.connect(user);
     ap = ap.connect(user);
@@ -85,7 +89,7 @@ describe("Lottery", function () {
 
   describe("when can participate", function () {
     beforeEach(async function () {
-      await (await lottery.startLottery()).wait();
+      await startLottery()
     });
 
     it("draw single lottery", async function () {
@@ -108,12 +112,13 @@ describe("Lottery", function () {
       await expect(lottery.connect(user0).drawLottery(1)).to.be.revertedWith("<drawlottery> lottery is closed");
     });
 
-    it("when user has no ticket", async function () {
-      await expect(lottery.connect(user2).drawLottery(3)).to.be.revertedWith("<drawlottery> lottery is closed");
+    it("when user has no AP", async function () {
+      await startLottery();
+      await expect(lottery.connect(user2).drawLottery(3)).to.be.revertedWith("<drawlottery> insufficient AP balance");
     });
 
     it("when tickets are not enough or sold out", async function () {
-      await (await lottery.startLottery()).wait();
+      await startLottery();
       const ticketsRemaining = await lottery.maxTicketsCount();
       console.log({ ticketsRemaining })
 
