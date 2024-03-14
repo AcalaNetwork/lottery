@@ -11,7 +11,7 @@ contract Lottery is Ownable {
 
     uint256 public endTime;
     uint256 public duration = 1 days;
-    uint256 public entryFee = 10 ether; // Assuming AP tokens have 18 decimals
+    uint256 public entryFee = 10 ether;
     uint256 public totalTicketsCount = 0;
 
     constructor(address _apTokenAddress, address _acaTokenAddress, address initialOwner) 
@@ -89,4 +89,7 @@ contract Lottery is Ownable {
         require(acaBalance > 0, "<withdrawaca> no aca to withdraw");
         acaToken.transfer(msg.sender, acaBalance);
     }
+
+    receive() external payable {}
+    fallback() external payable {}
 }

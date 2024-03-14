@@ -18,16 +18,20 @@ contract AcalaPoint is ERC20, ERC20Burnable, Ownable {
     }
 
     function mint(address _to, uint256 _amount) external {
-        require(whitelistedMinters[msg.sender], "<mint> not a whitelisted minter");
+        require(canMint(msg.sender), "<mint> no mint permission");
         _mint(_to, _amount);
     }
 
     function mintBatch(address[] calldata _addresses, uint256[] calldata _amounts) external {
-        require(whitelistedMinters[msg.sender], "<mintBatch> not a whitelisted minter");
-        require(_addresses.length == _amounts.length, "<mintBatch> array lengths mismatch");
+        require(canMint(msg.sender), "<mintBatch> no mint permission");
+        require(_addresses.length == _amounts.length, "<mintBatch> addr and amount lengths mismatch");
 
         for (uint256 i = 0; i < _addresses.length; i++) {
             _mint(_addresses[i], _amounts[i]);
         }
+    }
+
+    function canMint(address _sender) private view returns (bool) {
+        return whitelistedMinters[_sender] || _sender == owner();
     }
 }
