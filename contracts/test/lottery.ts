@@ -15,7 +15,7 @@ const almostEq = (a: bigint, b: bigint, maxDiff: bigint = parseUnits('3', ACA_DE
   return a - b <= maxDiff && b - a <= maxDiff;
 }
 
-describe.only("Lottery", function () {
+describe("Lottery", function () {
   let aca: Token;
   let ap: AcalaPoint;
   let lottery: Lottery;
