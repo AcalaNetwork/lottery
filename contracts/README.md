@@ -1,13 +1,10 @@
-# Sample Hardhat Project
+# Acala Lottery
+It contains two contracts:
+- `Acala Point`: token used to draw lottery, usually each draw consumes 10 `AP` token, and the reward amount is 10 - 500 `ACA` token
+- `Lottery`: lottery contract that burn `AP` token and reward `ACA` token
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
-
-Try running some of the following tasks:
-
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
+## Test
+- start acala stack: `docker compose up`
+- install deps: `yarn`
+- build contracts: `yarn build`
+- run test: `yarn test`
