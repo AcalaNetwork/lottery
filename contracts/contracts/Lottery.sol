@@ -14,6 +14,7 @@ contract Lottery is Ownable {
     uint256 public entryFee = 10 ether;
     uint256 public maxTicketsCount = 350;
     uint256 public ticketsSold = 0;
+    uint256 private nonce = 0;
 
     constructor(address _apTokenAddress, address _acaTokenAddress, address _initialOwner)
         Ownable(_initialOwner) {
@@ -54,7 +55,7 @@ contract Lottery is Ownable {
         require(acaToken.transfer(msg.sender, totalRewardAca), "<drawlottery> transfer failed");
     }
 
-    function randRewardAmount() private view returns (uint256) {
+    function randRewardAmount() private returns (uint256) {
         uint256 rand = randNumber(1, 10000);
         if (rand <= 7000) {         // 70%
             return randNumber(10, 20);
@@ -73,8 +74,9 @@ contract Lottery is Ownable {
         }
     }
 
-    function randNumber(uint256 min, uint256 max) private view returns (uint256) {
-        uint256 rand256 = uint256(keccak256(abi.encodePacked(blockhash(block.number - 1), block.timestamp)));
+    function randNumber(uint256 min, uint256 max) private returns (uint256) {
+        nonce++; // Ensure a different value for each call within the same block
+        uint256 rand256 = uint256(keccak256(abi.encodePacked(blockhash(block.number - 1), block.timestamp, nonce)));
         return min + (rand256 % (max - min + 1));
     }
 

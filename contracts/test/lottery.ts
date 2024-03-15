@@ -57,7 +57,7 @@ describe("Lottery", function () {
     }))).wait();
 
     // mint some AP for users
-    const mintAmount = parseEther("10000");
+    const mintAmount = parseEther("100000");
     await (await ap.mintBatch([addr0, addr1], [mintAmount, mintAmount])).wait();
   });
 
@@ -81,10 +81,11 @@ describe("Lottery", function () {
     expect(apBalBefore - apBalAfter).to.eq(entryFee * ticketCount);
 
     const payout = acaBalAfter - acaBalBefore;
+    console.log(`${ticketCount} tickets => ${formatUnits(payout, ACA_DECIMALS)}`);
     expect(payout).to.be.gte(PAYOUT_MIN * ticketCount);
     expect(payout).to.be.lte(PAYOUT_MAX * ticketCount);
 
-    console.log(`${ticketCount} tickets => ${formatUnits(payout, ACA_DECIMALS)}`);
+    return payout;
   }
 
   describe("when can participate", function () {
@@ -101,6 +102,29 @@ describe("Lottery", function () {
       await testDraw(5n, user1);
       await testDraw(10n, user0);
       await testDraw(50n, user1);
+    });
+  });
+
+  describe("payout expectation", function () {
+    it("draw single lottery", async function () {
+      const iterations = 10;
+      let totalPayout = 0n;
+      let totalTickets = 0;
+      for (let i = 0; i < iterations; i++) {
+        await startLottery()
+
+        for (let j = 0; j < 10; j++) {
+          const ticketCount = Math.floor(Math.random() * 35) + 1;
+          totalPayout += await testDraw(BigInt(ticketCount), user0);
+          totalTickets += ticketCount;
+        }
+
+        console.log(`iteraiont ${i}: ${totalTickets} tickets => ${formatUnits(totalPayout, ACA_DECIMALS)} | avg payout: ${formatUnits(totalPayout / BigInt(totalTickets), ACA_DECIMALS)}`);
+      }
+
+      // expected average payout should be ~22
+      expect(totalPayout / BigInt(totalTickets)).to.be.gte(parseUnits("18", ACA_DECIMALS));
+      expect(totalPayout / BigInt(totalTickets)).to.be.lte(parseUnits("25", ACA_DECIMALS));
     });
   });
 
