@@ -2,10 +2,10 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Signer, parseEther } from "ethers";
 
-import { AcalaPoint } from "../typechain-types";
+import { AmbassadorPoint } from "../typechain-types";
 
-describe("AcalaPoint", function () {
-  let acalaPoint: AcalaPoint;
+describe("AmbassadorPoint", function () {
+  let ap: AmbassadorPoint;
 
   let owner: Signer;
   let user0: Signer;
@@ -21,68 +21,68 @@ describe("AcalaPoint", function () {
     addr0 = await user0.getAddress();
     addr1 = await user1.getAddress();
 
-    acalaPoint = await ethers.deployContract("AcalaPoint", [addrOwner]);
-    await acalaPoint.waitForDeployment();
+    ap = await ethers.deployContract("AmbassadorPoint", [addrOwner]);
+    await ap.waitForDeployment();
   });
 
   describe("when can mint", async function () {
     it("owner mint", async function () {
-      const balBefore = await acalaPoint.balanceOf(addr0);
+      const balBefore = await ap.balanceOf(addr0);
 
       const mintAmount = parseEther("528.3222");
-      await (await acalaPoint.mint(addr0, mintAmount)).wait();
+      await (await ap.mint(addr0, mintAmount)).wait();
 
-      const balAfter = await acalaPoint.balanceOf(addr0);
+      const balAfter = await ap.balanceOf(addr0);
       expect(balAfter - balBefore).to.equal(mintAmount);      
     });
     
     it("owner batch mint", async function () {
-      const bal0Before = await acalaPoint.balanceOf(addr0);
-      const bal1Before = await acalaPoint.balanceOf(addr1);
+      const bal0Before = await ap.balanceOf(addr0);
+      const bal1Before = await ap.balanceOf(addr1);
       
       const mintAmount0 = parseEther("123");
       const mintAmount1 = parseEther("321.123");
-      await acalaPoint.mintBatch(
+      await ap.mintBatch(
         [addr0, addr1],
         [mintAmount0, mintAmount1]
       );
-      const bal0After = await acalaPoint.balanceOf(addr0);
-      const bal1After = await acalaPoint.balanceOf(addr1);
+      const bal0After = await ap.balanceOf(addr0);
+      const bal1After = await ap.balanceOf(addr1);
 
       expect(bal0After - bal0Before).to.equal(mintAmount0);
       expect(bal1After - bal1Before).to.equal(mintAmount1);
     });
 
     it("whitelisted minter mint", async function () {
-      const balBefore = await acalaPoint.balanceOf(addr1);
+      const balBefore = await ap.balanceOf(addr1);
       
       // Whitelist addr0 as minter
-      await (await acalaPoint.whitelistMinter(addr0)).wait();
-      acalaPoint = acalaPoint.connect(user0);
+      await (await ap.whitelistMinter(addr0)).wait();
+      ap = ap.connect(user0);
       
       const mintAmount = parseEther("17");
-      await (await acalaPoint.mint(addr1, mintAmount)).wait();
+      await (await ap.mint(addr1, mintAmount)).wait();
 
-      const balAfter = await acalaPoint.balanceOf(addr1);
+      const balAfter = await ap.balanceOf(addr1);
       expect(balAfter - balBefore).to.equal(mintAmount);
     });
 
     it("whitelisted minter batch mint", async function () {
-      const bal0Before = await acalaPoint.balanceOf(addr0);
-      const bal1Before = await acalaPoint.balanceOf(addr1);
+      const bal0Before = await ap.balanceOf(addr0);
+      const bal1Before = await ap.balanceOf(addr1);
 
       // Whitelist addr0 as minter
-      await (await acalaPoint.whitelistMinter(addr0)).wait();
-      acalaPoint = acalaPoint.connect(user0);
+      await (await ap.whitelistMinter(addr0)).wait();
+      ap = ap.connect(user0);
       
       const mintAmount0 = parseEther("123");
       const mintAmount1 = parseEther("321.123");
-      await acalaPoint.mintBatch(
+      await ap.mintBatch(
         [addr0, addr1],
         [mintAmount0, mintAmount1]
       );
-      const bal0After = await acalaPoint.balanceOf(addr0);
-      const bal1After = await acalaPoint.balanceOf(addr1);
+      const bal0After = await ap.balanceOf(addr0);
+      const bal1After = await ap.balanceOf(addr1);
 
       expect(bal0After - bal0Before).to.equal(mintAmount0);
       expect(bal1After - bal1Before).to.equal(mintAmount1);
@@ -91,10 +91,10 @@ describe("AcalaPoint", function () {
 
   describe("when cannot mint", async function () {
     it("others fail to mint or batch mint AP tokens", async function () {
-      await expect(acalaPoint.connect(user1).mint(addr0, parseEther("100")))
+      await expect(ap.connect(user1).mint(addr0, parseEther("100")))
         .to.be.revertedWith("<mint> no mint permission");
 
-      await expect(acalaPoint.connect(user1).mintBatch([addr0, addr1], [parseEther("50"), parseEther("50")]))
+      await expect(ap.connect(user1).mintBatch([addr0, addr1], [parseEther("50"), parseEther("50")]))
         .to.be.revertedWith("<mintBatch> no mint permission");
     });
   });

@@ -14,6 +14,11 @@ const PROD_ACCOUNTS = process.env.KEY ? [process.env.KEY] : [];
 const config: HardhatUserConfig = {
   solidity: '0.8.24',
   networks: {
+    local: {
+      url: 'http://localhost:8545',
+      accounts: TEST_ACCOUNTS,
+      chainId: 595,
+    },
     mandala: {
       url: 'https://eth-rpc-tc9.aca-staging.network',
       accounts: TEST_ACCOUNTS,

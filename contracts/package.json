@@ -5,8 +5,10 @@
   "license": "MIT",
   "scripts": {
     "build": "hardhat compile",
-    "test": "hardhat test --network mandala",
-    "deploy": "hardhat run scripts/deploy.ts"
+    "test": "hardhat test --network local",
+    "deploy": "hardhat run scripts/deploy.ts",
+    "publish-contract": "hardhat run scripts/publish.ts",
+    "clean": "rm -rf typechain-types artifacts cache"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.0.2"

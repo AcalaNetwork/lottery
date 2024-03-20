@@ -1,11 +1,10 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Signer, formatEther, formatUnits, parseEther, parseUnits } from "ethers";
+import { Signer, formatUnits, parseEther, parseUnits } from "ethers";
 import { ACA } from "@acala-network/contracts/utils/MandalaTokens";
+import { Token, Token__factory } from "@acala-network/contracts/typechain";
 
-import { AcalaPoint, Lottery } from "../typechain-types";
-import { Token } from "../typechain-types/contracts/ERC20.sol";
-import { Token__factory } from "../typechain-types/factories/contracts/ERC20.sol";
+import { AmbassadorPoint, Lottery } from "../typechain-types";
 
 const ACA_DECIMALS = 12;
 const PAYOUT_MIN = parseUnits("10", ACA_DECIMALS);
@@ -17,7 +16,7 @@ const almostEq = (a: bigint, b: bigint, maxDiff: bigint = parseUnits('3', ACA_DE
 
 describe("Lottery", function () {
   let aca: Token;
-  let ap: AcalaPoint;
+  let ap: AmbassadorPoint;
   let lottery: Lottery;
 
   let owner: Signer;
@@ -40,7 +39,7 @@ describe("Lottery", function () {
 
     aca = Token__factory.connect(ACA, owner);
 
-    ap = await ethers.deployContract("AcalaPoint", [addrOwner]);
+    ap = await ethers.deployContract("AmbassadorPoint", [addrOwner]);
 
     lottery = await ethers.deployContract("Lottery", [
       await ap.getAddress(),
