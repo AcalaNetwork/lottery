@@ -58,7 +58,7 @@ describe("AmbassadorPoint", function () {
       
       // Whitelist addr0 as minter
       await (await ap.whitelistMinter(addr0)).wait();
-      ambassadorPoint = ap.connect(user0);
+      ap = ap.connect(user0);
       
       const mintAmount = parseEther("17");
       await (await ap.mint(addr1, mintAmount)).wait();
@@ -73,7 +73,7 @@ describe("AmbassadorPoint", function () {
 
       // Whitelist addr0 as minter
       await (await ap.whitelistMinter(addr0)).wait();
-      ambassadorPoint = ap.connect(user0);
+      ap = ap.connect(user0);
       
       const mintAmount0 = parseEther("123");
       const mintAmount1 = parseEther("321.123");

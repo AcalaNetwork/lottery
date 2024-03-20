@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "hardhat compile",
-    "test": "hardhat test --network mandala",
+    "test": "hardhat test --network local",
     "deploy": "hardhat run scripts/deploy.ts",
     "clean": "rm -rf typechain-types artifacts cache"
   },
