@@ -16,6 +16,13 @@ contract Lottery is Ownable {
     uint256 public ticketsSold = 0;
     uint256 private nonce = 0;
 
+    event LotteryDraw(
+        address indexed player,
+        uint256 ticketCount,
+        uint256 totalRewardAca,
+        uint256[] rewardsComposition
+    );
+
     constructor(address _apTokenAddress, address _acaTokenAddress, address _initialOwner)
         Ownable(_initialOwner) {
         apToken = ERC20Burnable(_apTokenAddress);
@@ -34,6 +41,22 @@ contract Lottery is Ownable {
         return !isTimePast && isTicketAvailable;
     }
 
+    function timeRemaining() public view returns (uint256) {
+        if (block.timestamp >= endTime) {
+            return 0;
+        } else {
+            return endTime - block.timestamp;
+        }
+    }
+
+    function ticketRemaining() public view returns (uint256) {
+        if (ticketsSold >= maxTicketsCount) {
+            return 0;
+        } else {
+            return maxTicketsCount - ticketsSold;
+        }
+    }
+
     function drawLottery(uint256 _ticketCount) external {
         require(isOpen(), "<drawlottery> lottery is closed");
         ticketsSold += _ticketCount;
@@ -46,13 +69,18 @@ contract Lottery is Ownable {
         apToken.burnFrom(msg.sender, totalEntryFee);
 
         uint256 totalReward = 0;
+        uint256[] memory rewardsComposition = new uint256[](_ticketCount);
         for (uint256 i = 0; i < _ticketCount; i++) {
-            totalReward += randRewardAmount();
+            uint256 reward = randRewardAmount();
+            totalReward += reward;
+            rewardsComposition[i] = reward;
         }
 
         uint256 totalRewardAca = totalReward * 10**12;
         require(totalRewardAca <= acaToken.balanceOf(address(this)), "<drawlottery> not enough ACA for reward");
         require(acaToken.transfer(msg.sender, totalRewardAca), "<drawlottery> transfer failed");
+
+        emit LotteryDraw(msg.sender, _ticketCount, totalRewardAca, rewardsComposition);
     }
 
     function randRewardAmount() private returns (uint256) {
