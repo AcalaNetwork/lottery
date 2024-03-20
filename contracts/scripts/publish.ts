@@ -2,8 +2,8 @@ import { EVM as EVM_ADDR } from '@acala-network/contracts/utils/Predeploy';
 import { EVM__factory } from '@acala-network/contracts/typechain';
 import { ethers } from 'hardhat';
 
-const AP_ADDR = '0xa49203cE497a875512048c5c48B755F5462eC126';
-const LOTTERY_ADDR = '0x151E93a195121eE6245E7D37605F630055d511F6';
+const AP_ADDR = '0x7Bc37234E333007c6a03A7a448F60A2eC24cf72b';
+const LOTTERY_ADDR = '0x104d8015F8478d145aeDD167cB76A8bB3B06078D';
 
 async function main() {
   const [deployer] = await ethers.getSigners();
