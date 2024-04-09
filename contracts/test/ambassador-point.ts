@@ -2,10 +2,10 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Signer, parseEther } from "ethers";
 
-import { AmbassadorPoint } from "../typechain-types";
+import { AcalaPoint } from "../typechain-types";
 
-describe("AmbassadorPoint", function () {
-  let ap: AmbassadorPoint;
+describe("AcalaPoint", function () {
+  let ap: AcalaPoint;
 
   let owner: Signer;
   let user0: Signer;
@@ -21,7 +21,7 @@ describe("AmbassadorPoint", function () {
     addr0 = await user0.getAddress();
     addr1 = await user1.getAddress();
 
-    ap = await ethers.deployContract("AmbassadorPoint", [addrOwner]);
+    ap = await ethers.deployContract("AcalaPoint", [addrOwner]);
     await ap.waitForDeployment();
   });
 

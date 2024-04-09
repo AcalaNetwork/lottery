@@ -1,0 +1,65 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:12-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 5s
+      retries: 100
+
+  subquery-node:
+    image: onfinality/subql-node-ethereum:latest
+    depends_on:
+      "postgres":
+        condition: service_healthy
+    restart: always
+    environment:
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_DATABASE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+    volumes:
+      - ./:/app
+    command:
+      - -f=ipfs://QmVgdEg5uXyYxHVR9GzRN9MUntMY2SLjA9Vxsd4fNGoPuc
+      # - -f=./app
+      - --db-schema=lottery-subql
+      - --workers=1
+      - --batch-size=10
+      - --unfinalized-blocks=false
+      - --disable-historical
+      - --store-flush-interval=10
+      - --network-endpoint=https://eth-rpc-tc9.aca-staging.network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+
+  graphql-engine:
+    image: onfinality/subql-query:latest
+    ports:
+      - 3000:3000
+    depends_on:
+      "postgres":
+        condition: service_healthy
+      "subquery-node":
+        condition: service_healthy
+    restart: always
+    environment:
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_DATABASE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+    command:
+      - --name=lottery-subql
+      - --playground
+      - --indexer=http://subquery-node:3000
