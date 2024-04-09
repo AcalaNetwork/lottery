@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract AmbassadorPoint is ERC20, ERC20Burnable, Ownable {
+contract AcalaPoint is ERC20, ERC20Burnable, Ownable {
     mapping(address => bool) public whitelistedMinters;
 
     constructor(address _initialOwner) ERC20("Ambassador Point", "AP") Ownable(_initialOwner) {}

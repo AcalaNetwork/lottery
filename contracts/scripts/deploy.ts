@@ -6,7 +6,7 @@ async function main() {
   const [owner] = await ethers.getSigners();
   console.log(`owner address: ${await owner.getAddress()}`)
 
-  const ap = await ethers.deployContract("AmbassadorPoint", [await owner.getAddress()]);
+  const ap = await ethers.deployContract("AcalaPoint", [await owner.getAddress()]);
   await ap.waitForDeployment();
   console.log(`Ambassador Point address: ${await ap.getAddress()}`);
   

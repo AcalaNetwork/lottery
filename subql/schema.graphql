@@ -1,0 +1,9 @@
+type LotteryDraw @entity {
+  id: ID!
+  address: String!
+  ticketCount: Int!
+  totalRewardAca: BigInt!
+  rewardsComposition: [BigInt]!
+  blocknumber: Int!
+  txHash: String!
+}

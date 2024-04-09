@@ -1,0 +1,37 @@
+{
+  "name": "acala-lottery-subql",
+  "version": "0.0.1",
+  "description": "Subql for Acala Lottery",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "subql build",
+    "codegen": "subql codegen",
+    "start:docker": "docker-compose pull && docker-compose up --remove-orphans",
+    "dev": "yarn codegen && yarn build && docker-compose pull && docker-compose up --remove-orphans",
+    "prepack": "rm -rf dist && npm run build",
+    "test": "jest"
+  },
+  "files": [
+    "dist",
+    "schema.graphql",
+    "project.yaml"
+  ],
+  "author": "Acala Team",
+  "license": "MIT",
+  "dependencies": {
+    "@subql/common": "latest",
+    "@subql/types-ethereum": "latest",
+    "@subql/validator": "latest",
+    "abab": "^2.0.6",
+    "assert": "^2.0.0"
+  },
+  "devDependencies": {
+    "@subql/cli": "^4.5.0",
+    "@subql/node-ethereum": "latest",
+    "@subql/testing": "latest",
+    "@subql/types": "latest",
+    "@subql/types-core": "^0.6.0",
+    "ethers": "^5.7.2",
+    "typescript": "latest"
+  }
+}
