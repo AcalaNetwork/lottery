@@ -28,7 +28,7 @@ services:
     volumes:
       - ./:/app
     command:
-      - -f=ipfs://QmVgdEg5uXyYxHVR9GzRN9MUntMY2SLjA9Vxsd4fNGoPuc
+      - -f=ipfs://QmPbxRLT7TPVi544XUKzmsV1omtnDYiq7wiePGH3cfwdFa
       # - -f=./app
       - --db-schema=lottery-subql
       - --workers=1
@@ -36,7 +36,8 @@ services:
       - --unfinalized-blocks=false
       - --disable-historical
       - --store-flush-interval=10
-      - --network-endpoint=https://eth-rpc-tc9.aca-staging.network
+      - --network-endpoint=https://crosschain-dev.polkawallet.io/forkAcala
+      - --log-level=debug
     healthcheck:
       test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
       interval: 3s
