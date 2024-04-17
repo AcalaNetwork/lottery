@@ -4,32 +4,35 @@ import { ACA as acalaAca } from "@acala-network/contracts/utils/AcalaTokens";
 
 async function main() {
   const [owner] = await ethers.getSigners();
-  console.log(`owner address: ${await owner.getAddress()}`)
+  const ownerAddr = await owner.getAddress();
+  console.log(`owner address: ${ownerAddr}`)
 
-  const ap = await ethers.deployContract("AcalaPoint", [await owner.getAddress()]);
+  const ap = await ethers.deployContract("AcalaPoint", [ownerAddr]);
   await ap.waitForDeployment();
-  console.log(`Ambassador Point address: ${await ap.getAddress()}`);
+  const apAddr = await ap.getAddress();
+  console.log(`Acala Point address: ${apAddr}`);
   
   if (process.env.VERIFY) {
     await run('verify:verify', {
-      address: await ap.getAddress(),
-      constructorArguments: [await owner.getAddress()],
+      address: apAddr,
+      constructorArguments: [ownerAddr],
     });
   }
   
   const acaAddr = network.name === "mandala" ? mandalaAca : acalaAca;
   const lotteryArgs = [
-    await ap.getAddress(),
+    apAddr,
     acaAddr,
-    await owner.getAddress()
+    ownerAddr
   ];
   const lottery = await ethers.deployContract("Lottery", lotteryArgs);
   await lottery.waitForDeployment();
-  console.log(`Lottery address: ${await lottery.getAddress()}`);
+  const lotteryAddr = await lottery.getAddress();
+  console.log(`Lottery address: ${lotteryAddr}`);
 
   if (process.env.VERIFY) {
     await run('verify:verify', {
-      address: await lottery.getAddress(),
+      address: lotteryAddr,
       constructorArguments: lotteryArgs,
     });
   }

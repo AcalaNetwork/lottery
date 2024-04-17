@@ -28,16 +28,17 @@ services:
     volumes:
       - ./:/app
     command:
-      - -f=ipfs://QmPbxRLT7TPVi544XUKzmsV1omtnDYiq7wiePGH3cfwdFa
-      # - -f=./app
-      - --db-schema=lottery-subql
-      - --workers=1
-      - --batch-size=10
+      # - -f=ipfs://QmcZssh6m72BGr1hdxeWib9Un4Ss7bL1hyTjzqnQyMPE4F
+      - -f=./app
+      - --db-schema=lottery-acala
+      - --workers=10
+      - --batch-size=1
       - --unfinalized-blocks=false
       - --disable-historical
-      - --store-flush-interval=10
-      - --network-endpoint=https://crosschain-dev.polkawallet.io/forkAcala
-      - --log-level=debug
+      - --store-flush-interval=3
+      # - --network-endpoint=http://host.docker.internal:8545
+      - --network-endpoint=https://eth-rpc-acala.aca-api.network
+      # - --log-level=debug
     healthcheck:
       test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
       interval: 3s
@@ -61,6 +62,6 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
     command:
-      - --name=lottery-subql
+      - --name=lottery
       - --playground
       - --indexer=http://subquery-node:3000
