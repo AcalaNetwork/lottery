@@ -28,9 +28,9 @@ services:
     volumes:
       - ./:/app
     command:
-      # - -f=ipfs://QmcZssh6m72BGr1hdxeWib9Un4Ss7bL1hyTjzqnQyMPE4F
-      - -f=./app
-      - --db-schema=lottery-acala
+      - -f=ipfs://Qmcbx4FQKf5zkwz7qjXZieqpAWKbv2gsN9Fy3CeHZnM9fc
+      # - -f=./app
+      - --db-schema=lottery-subql
       - --workers=1
       - --batch-size=10
       - --unfinalized-blocks=false
@@ -60,6 +60,6 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
     command:
-      - --name=lottery
+      - --name=lottery-subql
       - --playground
       - --indexer=http://subquery-node:3000

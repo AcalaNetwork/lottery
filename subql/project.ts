@@ -38,7 +38,7 @@ const project: EthereumProject = {
       options: {
         // Must be a key of assets
         abi: "lotteryAbi",
-        address: "0x104d8015F8478d145aeDD167cB76A8bB3B06078D",
+        address: "0xAC3Dbd6EdB5dbd7D6Be93ee41Fcba28A8339cC11",
       },
       assets: new Map([["lotteryAbi", { file: "./abis/Lottery.json" }]]),
       mapping: {
