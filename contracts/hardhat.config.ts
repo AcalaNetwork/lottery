@@ -30,7 +30,7 @@ const config: HardhatUserConfig = {
       chainId: 596,
     },
     acalaFork: {
-      url: 'http://127.0.0.1:8545',
+      url: 'https://crosschain-dev.polkawallet.io/forkAcala/',
       accounts: TEST_ACCOUNTS,
       chainId: 787,
     },

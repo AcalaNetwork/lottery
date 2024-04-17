@@ -28,15 +28,15 @@ services:
     volumes:
       - ./:/app
     command:
-      - -f=ipfs://QmVgdEg5uXyYxHVR9GzRN9MUntMY2SLjA9Vxsd4fNGoPuc
-      # - -f=./app
-      - --db-schema=lottery-subql
+      # - -f=ipfs://QmcZssh6m72BGr1hdxeWib9Un4Ss7bL1hyTjzqnQyMPE4F
+      - -f=./app
+      - --db-schema=lottery-acala
       - --workers=1
       - --batch-size=10
       - --unfinalized-blocks=false
       - --disable-historical
       - --store-flush-interval=10
-      - --network-endpoint=https://eth-rpc-tc9.aca-staging.network
+      - --network-endpoint=https://eth-rpc-acala.aca-api.network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
       interval: 3s
@@ -60,6 +60,6 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
     command:
-      - --name=lottery-subql
+      - --name=lottery
       - --playground
       - --indexer=http://subquery-node:3000

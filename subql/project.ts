@@ -25,16 +25,16 @@ const project: EthereumProject = {
     file: "./schema.graphql",
   },
   network: {
-    chainId: "595",
-    // chainId: "787",
-    // endpoint: [ "https://eth-rpc-acala.aca-api.network" ],
-    endpoint: [ "https://eth-rpc-tc9.aca-staging.network" ],
+    chainId: "787",
+    endpoint: [ "https://eth-rpc-acala.aca-api.network" ],
+    // endpoint: [ "https://eth-rpc-tc9.aca-staging.network" ],
+    // endpoint: [ "https://crosschain-dev.polkawallet.io/forkAcala/" ],
     // dictionary: "https://gx.api.subquery.network/sq/subquery/eth-dictionary",
   },
   dataSources: [
     {
       kind: EthereumDatasourceKind.Runtime,
-      startBlock: 1770230,
+      startBlock: 5991400,
       options: {
         // Must be a key of assets
         abi: "lotteryAbi",
