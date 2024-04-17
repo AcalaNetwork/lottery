@@ -35,10 +35,8 @@ services:
       - --batch-size=10
       - --unfinalized-blocks=false
       - --disable-historical
-      - --store-flush-interval=3
-      # - --network-endpoint=http://host.docker.internal:8545
+      - --store-flush-interval=10
       - --network-endpoint=https://eth-rpc-acala.aca-api.network
-      # - --log-level=debug
     healthcheck:
       test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
       interval: 3s
