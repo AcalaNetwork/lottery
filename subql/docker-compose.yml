@@ -31,8 +31,8 @@ services:
       # - -f=ipfs://QmcZssh6m72BGr1hdxeWib9Un4Ss7bL1hyTjzqnQyMPE4F
       - -f=./app
       - --db-schema=lottery-acala
-      - --workers=10
-      - --batch-size=1
+      - --workers=1
+      - --batch-size=10
       - --unfinalized-blocks=false
       - --disable-historical
       - --store-flush-interval=3
