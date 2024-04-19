@@ -28,7 +28,7 @@ services:
     volumes:
       - ./:/app
     command:
-      - -f=ipfs://Qmcbx4FQKf5zkwz7qjXZieqpAWKbv2gsN9Fy3CeHZnM9fc
+      - -f=ipfs://QmSYtushiSbUR2tFffpgWs3LUCzNPCHyPS33cTHCktUYFm
       # - -f=./app
       - --db-schema=lottery-subql
       - --workers=1

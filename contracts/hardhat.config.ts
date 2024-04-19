@@ -12,7 +12,15 @@ const TEST_ACCOUNTS = {
 const PROD_ACCOUNTS = process.env.KEY ? [process.env.KEY] : [];
 
 const config: HardhatUserConfig = {
-  solidity: '0.8.24',
+  solidity: {
+    version: '0.8.24',
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200,
+      },
+    },
+  },
   networks: {
     local: {
       url: 'http://localhost:8545',

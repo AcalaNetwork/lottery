@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract AcalaPoint is ERC20, ERC20Burnable, Ownable {
     mapping(address => bool) public whitelistedMinters;
 
-    constructor(address _initialOwner) ERC20("Ambassador Point", "AP") Ownable(_initialOwner) {}
+    constructor(address _initialOwner) ERC20("Acala Point", "AP") Ownable(_initialOwner) {}
 
     function whitelistMinter(address _minter) external onlyOwner {
         whitelistedMinters[_minter] = true;
