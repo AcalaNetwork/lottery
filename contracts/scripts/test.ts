@@ -10,7 +10,9 @@ const withdraw = async (wallet: HardhatEthersSigner) => {
   const lottery = Lottery__factory.connect(LOTTERY_ADDR, wallet);
   const tx = await lottery.withdrawACA();
   
-  return await tx.wait();
+  const receipt = await tx.wait();
+  console.log(`finished at block ${receipt!.blockNumber}`);
+  console.log('');
 }
 
 const draw = async (wallet: HardhatEthersSigner, count: number) => {
@@ -18,7 +20,9 @@ const draw = async (wallet: HardhatEthersSigner, count: number) => {
   const lottery = Lottery__factory.connect(LOTTERY_ADDR, wallet);
   const tx = await lottery.drawLottery(count);
   
-  return await tx.wait();
+  const receipt = await tx.wait();
+  console.log(`finished at block ${receipt!.blockNumber}`);
+  console.log('');
 }
 
 const mintAp = async (wallet: HardhatEthersSigner, amount: number) => {
@@ -26,7 +30,9 @@ const mintAp = async (wallet: HardhatEthersSigner, amount: number) => {
   const ap = AcalaPoint__factory.connect(AP_ADDR, wallet);
   const tx = await ap.mint(await wallet.getAddress(), parseEther(String(amount)))
   
-  return await tx.wait();
+  const receipt = await tx.wait();
+  console.log(`finished at block ${receipt!.blockNumber}`);
+  console.log('');
 }
 
 const approve = async (wallet: HardhatEthersSigner) => {
@@ -34,7 +40,9 @@ const approve = async (wallet: HardhatEthersSigner) => {
   const ap = AcalaPoint__factory.connect(AP_ADDR, wallet);
   const tx = await ap.approve(LOTTERY_ADDR, MaxUint256);
 
-  return await tx.wait();
+  const receipt = await tx.wait();
+  console.log(`finished at block ${receipt!.blockNumber}`);
+  console.log('');
 }
 
 const getBal = async (wallet: HardhatEthersSigner) => {
@@ -43,25 +51,60 @@ const getBal = async (wallet: HardhatEthersSigner) => {
   return formatEther(bal);
 }
 
+const startIfNeeded = async (wallet: HardhatEthersSigner) => {
+  const lottery = Lottery__factory.connect(LOTTERY_ADDR, wallet);
+  const isOpen = await lottery.isOpen();
+
+  if (!isOpen) {
+    console.log('starting lottery ...')
+    const tx = await lottery.startLottery();
+    const receipt = await tx.wait();
+
+    console.log(`finished at block ${receipt!.blockNumber}`);
+    console.log('');
+  }
+}
+
+const depositToLottery = async (wallet: HardhatEthersSigner, amount: number) => {
+  console.log(`depositing ${amount} ACA to lottery ...`)
+  const tx = await wallet.sendTransaction({
+    to: LOTTERY_ADDR,
+    value: parseEther(String(amount)),
+    data: '0x',
+  });
+  
+  const receipt = await tx.wait();
+  console.log(`finished at block ${receipt!.blockNumber}`);
+  console.log('');
+}
+
+const randNumber = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 async function main() {
   const [deployer] = await ethers.getSigners();
   const addr = await deployer.getAddress();
   console.log(`user addr: ${addr}`)
 
   const curBal = await getBal(deployer);
-  await mintAp(deployer, 1000);
+  console.log(curBal)
 
-  await approve(deployer);
+  await depositToLottery(deployer, 500);
+
+  await startIfNeeded(deployer);
+
+  // await mintAp(deployer, 1000);
+  // await approve(deployer);
 
   await draw(deployer, 1);
-  await draw(deployer, 3);
-  await draw(deployer, 5);
+  await draw(deployer, randNumber(2, 3));
+  await draw(deployer, randNumber(4, 6));
 
   await withdraw(deployer);
 
   const newBal = await getBal(deployer);
-
-  console.log(curBal, newBal);
+  console.log(newBal);
 
   console.log('done 🎉');
 }

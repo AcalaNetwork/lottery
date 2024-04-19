@@ -34,11 +34,11 @@ const project: EthereumProject = {
   dataSources: [
     {
       kind: EthereumDatasourceKind.Runtime,
-      startBlock: 5991400,
+      startBlock: 5999540,
       options: {
         // Must be a key of assets
         abi: "lotteryAbi",
-        address: "0xAC3Dbd6EdB5dbd7D6Be93ee41Fcba28A8339cC11",
+        address: "0xfC5E479D4d226bF536CB91E427752A976E334BC9",
       },
       assets: new Map([["lotteryAbi", { file: "./abis/Lottery.json" }]]),
       mapping: {
